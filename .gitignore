@@ -1,0 +1,44 @@
+# =========================
+# .NET (DocReader folder)
+# =========================
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.cache
+**/*.csproj.user
+**/.vs/
+**/*.pdb
+**/*.dll
+**/*.exe
+**/*.log
+
+# Nếu có Rider/JetBrains IDE
+**/.idea/
+
+# =========================
+# Python (scripts folder)
+# =========================
+scripts/__pycache__/
+scripts/*.py[cod]
+scripts/*.pyo
+scripts/*.pyd
+scripts/*.so
+scripts/*.log
+
+# Virtual environment nếu đặt trong scripts
+scripts/venv/
+scripts/.venv/
+
+# Nếu dùng pipenv hoặc poetry
+Pipfile.lock
+poetry.lock
+
+# =========================
+# VSCode, OS-specific
+# =========================
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*~

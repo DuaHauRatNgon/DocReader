@@ -1,0 +1,8 @@
+=== TÓM TẮT VĂN BẢN ===
+
+Nhìn vào struct myData.public_info có 20 phần tử. Ta có thể tham chiếu đỉn các phồn tôn. MyData. public_info là m�’t struct ki�leu myData, which is a struct of my data. public.c.
+
+=== THÔNG TIN ===
+Độ dài văn bản gốc: 190 từ
+Độ dài tóm tắt: 32 từ
+Tỷ lệ nén: 16.8%

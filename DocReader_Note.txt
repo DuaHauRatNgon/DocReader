@@ -1,0 +1,53 @@
+architecture: Layered , Clean Architecture 
+
+Presentation (API)
+    ↓
+Application (Use Cases, Services, DTOs)
+    ↓
+Infrastructure (EF Core, FileStorage, PDF libs)
+    ↑
+Domain (Entities, Interfaces, Logic)
+
+
+
+
+DocReader.sln
+│
+├── DocReader.API/                --> ASP.NET Core Web API (Controllers, Middleware, DI)
+├── DocReader.Application/        --> Use Cases, Services, DTOs, Interfaces
+├── DocReader.Core/               --> Domain Model, Core Interfaces (no EF/Core-specific code)
+├── DocReader.Infrastructure/     --> EF Core, Repositories, FileStorage, external implementations
+
+
+structure:
+
+DocReader/
+├── DocReader.API/                # ASP.NET Core Web API
+│   ├── Controllers/
+│   ├── Models/RequestResponse/
+│   └── Program.cs, Startup.cs
+│
+├── DocReader.Application/        # Use cases, DTO, Services
+│   ├── Interfaces/
+│   ├── DTOs/
+│   ├── Services/
+│   └── UseCases/
+│
+├── DocReader.Core/               # Domain (Entities + Contracts)
+│   ├── Models/Domain/           # Document.cs, DocumentPage.cs
+│   ├── Interfaces/              # IFileStorage, IDocumentRepository, IDocumentProcessor
+│   └── ValueObjects/ (nếu cần)
+│
+├── DocReader.Infrastructure/     # Thực thi Interfaces (File + DB + PDF)
+│   ├── Persistence/             # EF Core DbContext, Migrations
+│   ├── FileStorage/            # LocalFileStorageService
+│   ├── PdfProcessing/          # PdfSharpDocumentProcessor
+│   └── DependencyInjection.cs
+│
+
+vai trò:
+Dự án	Vai trò
+DocReader.API			Endpoint HTTP, nhận request từ client
+DocReader.Application		Logic nghiệp vụ, orchestrate luồng xử lý
+DocReader.Core			Models + interface (pure domain, không phụ thuộc kỹ thuật)
+DocReader.Infrastructure	Thực thi lưu file, DB, PDF tách trang
