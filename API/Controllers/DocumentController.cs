@@ -15,16 +15,19 @@ namespace DocReader.Controllers {
         private readonly DocumentLoadService _loadService;
         private readonly DocumentModifyService _modifyService;
         private readonly DocumentRemoveService _removeService;
+        private readonly DocumentLoadingByBatchService _loadPageService;
 
 
         public DocumentController(DocumentUploadService uploadService,
                                     DocumentLoadService loadService,
                                     DocumentModifyService modifyService,
-                                    DocumentRemoveService removeService) {
+                                    DocumentRemoveService removeService,
+                                    DocumentLoadingByBatchService loadPageService) {
             _uploadService = uploadService;
             _loadService = loadService;
             _modifyService = modifyService;
             _removeService = removeService;
+            _loadPageService = loadPageService;
         }
 
 
@@ -80,5 +83,34 @@ namespace DocReader.Controllers {
 
 
 
+
+
+
+
+        [HttpGet]
+        [Route("{id}/pages/batch/base64")]
+        public async Task<IActionResult> GetDocumentPagesBase64(Guid id, int pageNumber, int batch_size) {
+            var pages = await _loadPageService.GetsSinglePageAsync(id, pageNumber, batch_size);
+
+            var base64Result = from p in pages
+                               select new {
+                                   pageNumber = p.PageNumber,
+                                   pageContentBase64Encoded = p.ContentBase64Encoded
+                               };
+
+            return Ok(base64Result);
+        }
+
+
+
+
+
+
+        [HttpGet]
+        [Route("{docId}/pages/batch/zip")]
+        public async Task<IActionResult> GetDocumentPagesZip(Guid docId, int pageNumber, int batch_size) {
+
+            return Ok();
+        }
     }
 }

@@ -25,6 +25,8 @@ namespace API {
             builder.Services.AddScoped<DocumentLoadService>();
             builder.Services.AddScoped<DocumentModifyService>();
             builder.Services.AddScoped<DocumentRemoveService>();
+            builder.Services.AddScoped<DocumentLoadingByBatchService>();
+            builder.Services.AddScoped<DocumentPageRepository>();
 
             var app = builder.Build();
 
