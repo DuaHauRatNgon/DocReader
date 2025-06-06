@@ -6,6 +6,7 @@ using Infrastructure.Repository;
 using Infrastructure.FileStorage;
 using Core.Models.Domain;
 using Infrastructure.ExtractTextFromPdf;
+using Core.Interfaces;
 
 namespace Application.Services {
     public class DocumentUploadService {
@@ -14,15 +15,16 @@ namespace Application.Services {
 
         private readonly IDocumentProcessor _processor;
         private readonly IFileStorage _fileStorage;
-        private readonly AppDbContext _context;
+        //private readonly AppDbContext _context;
+        private readonly IDocumentRepository _documentRepository;
 
 
 
-
-        public DocumentUploadService(IDocumentProcessor processor, IFileStorage storage, AppDbContext context) {
+        public DocumentUploadService(IDocumentProcessor processor, IFileStorage storage, AppDbContext context, IDocumentRepository documentRepository) {
             _processor = processor;
             _fileStorage = storage;
-            _context = context;
+            //_context = context;
+            _documentRepository = documentRepository;
         }
 
 
@@ -59,7 +61,9 @@ namespace Application.Services {
                 });
             }
 
-            _context.Documents.Add(
+
+            // goi xuong repo de chay context :v
+            _documentRepository.AddAsync(
                 new Document {
                     Id = docId,
                     Title = request.Title,
@@ -67,11 +71,27 @@ namespace Application.Services {
                     Author = request.Author,
                     CreatedAt = DateTime.UtcNow,
                     Pages = pages
-                }
-            );
+                });
 
-            //_context.SaveChanges();
-            await _context.SaveChangesAsync();
+
+
+
+
+            ////_context.Documents.Add(
+            ////    new Document {
+            ////        Id = docId,
+            ////        Title = request.Title,
+            ////        Field = request.Field,
+            ////        Author = request.Author,
+            ////        CreatedAt = DateTime.UtcNow,
+            ////        Pages = pages
+            ////    }
+            ////);
+
+            ////_context.SaveChanges();
+            //await _context.SaveChangesAsync();
+
+
 
             // summarizer
             ExtractTextFromPdf.Extract(docId.ToString(), 3);

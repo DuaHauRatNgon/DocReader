@@ -1,6 +1,12 @@
 ﻿using Infrastructure.PdfProcessing;
 using PdfSharpCore.Pdf.IO;
 
+//     _
+//    (-)
+//  _(   )_
+//  (_`/._)
+
+// a di da phat con xin duoc code no bug 
 
 namespace DocReader.Service.DocumentProcessor {
     public class PdfSharpDocumentProcessor : IDocumentProcessor {

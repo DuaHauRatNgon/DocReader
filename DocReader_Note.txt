@@ -51,3 +51,4 @@ DocReader.API			Endpoint HTTP, nhận request từ client
 DocReader.Application		Logic nghiệp vụ, orchestrate luồng xử lý
 DocReader.Core			Models + interface (pure domain, không phụ thuộc kỹ thuật)
 DocReader.Infrastructure	Thực thi lưu file, DB, PDF tách trang
+

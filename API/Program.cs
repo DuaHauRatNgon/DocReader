@@ -3,6 +3,7 @@ using DocReader.Service.DocumentProcessor;
 using Infrastructure.FileStorage;
 using Infrastructure.PdfProcessing;
 using Infrastructure.Repository;
+using Core.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,10 @@ namespace API {
             builder.Services.AddScoped<DocumentUploadService>();
             builder.Services.AddScoped<IDocumentProcessor, PdfSharpDocumentProcessor>();
             builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+            builder.Services.AddScoped<DocumentLoadService>();
+            builder.Services.AddScoped<DocumentModifyService>();
+            builder.Services.AddScoped<DocumentRemoveService>();
 
             var app = builder.Build();
 
