@@ -34,7 +34,7 @@ namespace DocReader.Controllers {
 
 
         [HttpPost]
-        [Route("/upload")]
+        [Route("upload")]
         public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request) {
             var docId = await _uploadService.UploadAsync(request);
             //return OkResult(docId);  

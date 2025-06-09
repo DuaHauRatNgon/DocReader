@@ -62,46 +62,25 @@ namespace Application.Services {
             }
 
 
+
+            // summarizer
+            var sumary = ExtractTextFromPdf.Extract(docId.ToString(), 3);
+
+
+
             // goi xuong repo de chay context :v
-            _documentRepository.AddAsync(
+            await _documentRepository.AddAsync(
                 new Document {
                     Id = docId,
                     Title = request.Title,
                     Field = request.Field,
                     Author = request.Author,
                     CreatedAt = DateTime.UtcNow,
-                    Pages = pages
+                    Pages = pages,
+                    Sumary = sumary
                 });
-
-
-
-
-
-            ////_context.Documents.Add(
-            ////    new Document {
-            ////        Id = docId,
-            ////        Title = request.Title,
-            ////        Field = request.Field,
-            ////        Author = request.Author,
-            ////        CreatedAt = DateTime.UtcNow,
-            ////        Pages = pages
-            ////    }
-            ////);
-
-            ////_context.SaveChanges();
-            //await _context.SaveChangesAsync();
-
-
-
-            // summarizer
-            ExtractTextFromPdf.Extract(docId.ToString(), 3);
 
             return docId;
         }
-
-
-        //public async Task SummarizerAsync() {
-
-        //}
     }
 }

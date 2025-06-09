@@ -11,6 +11,7 @@ namespace Core.Models.Domain {
         public string Title { get; set; }
         public string Field { get; set; }
         public string Author { get; set; }
+        public string Sumary { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

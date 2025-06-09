@@ -38,7 +38,7 @@ namespace Infrastructure.ExtractTextFromPdf {
 
 
 
-        public static void Extract(string docId, int maxPage = 3) {
+        public static string Extract(string docId, int maxPage = 3) {
             string _basePath = Path.Combine(Directory.GetCurrentDirectory(),
                                                             "storage", "documents");
             string dir = Path.Combine(_basePath, docId);
@@ -54,6 +54,8 @@ namespace Infrastructure.ExtractTextFromPdf {
 
             string outputPath = Path.Combine(dir, "summary_input.txt");
             File.WriteAllText(outputPath, sb.ToString());
+
+            return sb.ToString().Trim();
         }
 
     }
