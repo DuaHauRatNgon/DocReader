@@ -12,9 +12,11 @@ namespace Core.Models.Domain {
         public string Field { get; set; }
         public string Author { get; set; }
         public string Sumary { get; set; }
+        public ushort PageCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         public ICollection<DocumentPage> Pages { get; set; }
+        public ICollection<DocumentTag> Tags { get; set; } = new List<DocumentTag>();
     }
 }

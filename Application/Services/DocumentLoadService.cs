@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Infrastructure.Repository;
 using Infrastructure;
 using Core.Interfaces;
 
@@ -34,6 +33,11 @@ namespace Application.Services {
                                  Author = q.Author,
                                  Field = q.Field,
                                  Title = q.Title,
+                                 Sumary = q.Sumary,
+                                 PageCount = q.PageCount,
+                                 Tags = q.Tags?
+                                            .Select(dt => new TagResponse { Id = dt.Tag.Id, Name = dt.Tag.Name })
+                                              .ToList() ?? new List<TagResponse>()
                              };
             return docResList;
         }
@@ -43,7 +47,21 @@ namespace Application.Services {
 
         public async Task<SimpleDocumentResponese> GetByIdAsync(string docId) {
             var doc = await _repository.GetByIdAsync(_2Guid.ToGuid(docId));
-            return new SimpleDocumentResponese { Id = doc.Id, Title = doc.Title, Author = doc.Author, Field = doc.Field };
+            return new SimpleDocumentResponese {
+                Id = doc.Id,
+                Title = doc.Title,
+                Author = doc.Author,
+                Field = doc.Field,
+                Sumary = doc.Sumary,
+                PageCount = doc.PageCount,
+                Tags = doc.Tags?
+                    .Select(dt => new TagResponse {
+                        Id = dt.Tag.Id,
+                        Name = dt.Tag.Name
+                    })
+                     .ToList()
+                     ?? new List<TagResponse>()
+            };
         }
 
     }

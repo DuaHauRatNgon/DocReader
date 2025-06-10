@@ -4,6 +4,7 @@ using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609043503_PageCount")]
+    partial class PageCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Core.Models.Domain.Core.Models.Domain.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-                });
 
             modelBuilder.Entity("Core.Models.Domain.Document", b =>
                 {
@@ -96,21 +84,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("DocumentPages");
                 });
 
-            modelBuilder.Entity("Core.Models.Domain.DocumentTag", b =>
-                {
-                    b.Property<Guid>("DocumentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DocumentId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("DocumentTags");
-                });
-
             modelBuilder.Entity("Core.Models.Domain.DocumentPage", b =>
                 {
                     b.HasOne("Core.Models.Domain.Document", "Document")
@@ -122,35 +95,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("Core.Models.Domain.DocumentTag", b =>
-                {
-                    b.HasOne("Core.Models.Domain.Document", "Document")
-                        .WithMany("Tags")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Models.Domain.Core.Models.Domain.Tag", "Tag")
-                        .WithMany("DocumentTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Document");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("Core.Models.Domain.Core.Models.Domain.Tag", b =>
-                {
-                    b.Navigation("DocumentTags");
-                });
-
             modelBuilder.Entity("Core.Models.Domain.Document", b =>
                 {
                     b.Navigation("Pages");
-
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

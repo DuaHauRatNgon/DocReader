@@ -7,6 +7,7 @@ namespace Application.DTOs {
         public string Field { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public IFormFile File { get; set; } = null!;
+        public List<Guid> TagIds { get; set; }
     }
 
 }

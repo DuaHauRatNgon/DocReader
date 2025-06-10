@@ -11,5 +11,8 @@ namespace Application.DTOs {
         public string Field { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Sumary { get; set; } = string.Empty;
+        public ushort PageCount { get; set; }
+
+        public List<TagResponse> Tags { get; set; } = new List<TagResponse>();
     }
 }
