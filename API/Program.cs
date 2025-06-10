@@ -27,6 +27,19 @@ namespace API {
             builder.Services.AddScoped<DocumentRemoveService>();
             builder.Services.AddScoped<DocumentLoadingByBatchService>();
             builder.Services.AddScoped<DocumentPageRepository>();
+            builder.Services.AddScoped<TagService>();
+            builder.Services.AddScoped<TagRepository>();
+
+
+            builder.Services.AddCors(options => {
+                options.AddDefaultPolicy(policy => {
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+
 
             var app = builder.Build();
 
@@ -40,6 +53,7 @@ namespace API {
 
             app.UseAuthorization();
 
+            app.UseCors();
 
             app.MapControllers();
 
