@@ -14,5 +14,6 @@ namespace Application.DTOs {
         public ushort PageCount { get; set; }
 
         public List<TagResponse> Tags { get; set; } = new List<TagResponse>();
+        public string? ThumbnailUrl { get; set; }
     }
 }

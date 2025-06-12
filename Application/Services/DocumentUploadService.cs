@@ -11,6 +11,9 @@ using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 using Core.Models.Domain.Core.Models.Domain;
+using System.Drawing.Imaging;
+using UglyToad.PdfPig.Graphics;
+using Infrastructure.PdfProcessing;
 
 namespace Application.Services {
     public class DocumentUploadService {
@@ -65,6 +68,14 @@ namespace Application.Services {
                 });
             }
 
+            string _basePath = Path.Combine(Directory.GetCurrentDirectory(), "storage", "documents");
+            var dir = Path.Combine(_basePath, docId.ToString());
+
+            //them anh bia
+            var imagePath = Path.Combine(dir, $"{docId}.jpg");
+            var pdfPath = Path.Combine(dir, "page_1.pdf");
+            //Pdf2Img.ConvertFirstPageToJpeg(pdfPath, imagePath);
+            PdfToImageSharpConverter.ConvertPdfToJpeg(pdfPath, imagePath);
 
 
             // summarizer
@@ -72,9 +83,6 @@ namespace Application.Services {
 
 
             // dem so trang max length
-            string _basePath = Path.Combine(Directory.GetCurrentDirectory(),
-                                                            "storage", "documents");
-            var dir = Path.Combine(_basePath, docId.ToString());
             var pageCount = (ushort)Directory.GetFiles(dir).Length;
 
 

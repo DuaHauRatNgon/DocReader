@@ -6,6 +6,7 @@ using Infrastructure.Repository;
 using Core.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace API {
     public class Program {
@@ -29,7 +30,9 @@ namespace API {
             builder.Services.AddScoped<DocumentPageRepository>();
             builder.Services.AddScoped<TagService>();
             builder.Services.AddScoped<TagRepository>();
+            builder.Services.AddScoped<DocumentSearchService>();
 
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddCors(options => {
                 options.AddDefaultPolicy(policy => {
@@ -48,6 +51,18 @@ namespace API {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions {
+                FileProvider = new PhysicalFileProvider(
+                     Path.Combine(Directory.GetCurrentDirectory(), "storage", "documents")),
+                RequestPath = "/storage/documents"
+            });
+
+
+
 
             app.UseHttpsRedirection();
 

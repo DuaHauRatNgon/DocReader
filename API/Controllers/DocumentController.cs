@@ -16,18 +16,21 @@ namespace DocReader.Controllers {
         private readonly DocumentModifyService _modifyService;
         private readonly DocumentRemoveService _removeService;
         private readonly DocumentLoadingByBatchService _loadPageService;
+        private readonly DocumentSearchService _searchService;
 
 
         public DocumentController(DocumentUploadService uploadService,
                                     DocumentLoadService loadService,
                                     DocumentModifyService modifyService,
                                     DocumentRemoveService removeService,
-                                    DocumentLoadingByBatchService loadPageService) {
+                                    DocumentLoadingByBatchService loadPageService,
+                                    DocumentSearchService searchService) {
             _uploadService = uploadService;
             _loadService = loadService;
             _modifyService = modifyService;
             _removeService = removeService;
             _loadPageService = loadPageService;
+            _searchService = searchService;
         }
 
 
@@ -112,5 +115,28 @@ namespace DocReader.Controllers {
 
             return Ok();
         }
+
+
+
+
+
+
+        /// request api endpoint 4 search
+        // search with post voi body json
+        [HttpPost]
+        [Route("search")]
+        public async Task<IActionResult> SearchDocuments([FromBody] DocumentSearchRequest request) {
+            var result = await _searchService.SearchDocumentsAsync(request);
+            return Ok(result);
+        }
+
+        // search voi get query parameters
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> SearchDocumentsGet([FromQuery] DocumentSearchRequest request) {
+            var result = await _searchService.SearchDocumentsAsync(request);
+            return Ok(result);
+        }
+
     }
 }

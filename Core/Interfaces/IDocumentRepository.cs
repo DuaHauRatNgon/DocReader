@@ -13,6 +13,9 @@ namespace Core.Interfaces {
         Task AddAsync(Document doc);
         Task UpdateAsync(Document doc);
         Task DeleteAsync(Guid id);
+
+
+        IQueryable<Document> GetQueryable();
     }
 
 }

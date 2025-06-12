@@ -138,6 +138,8 @@ namespace Infrastructure.Repository {
 
 
 
-
+        public IQueryable<Document> GetQueryable() {
+            return _context.Documents.AsQueryable().Include(d => d.Tags).ThenInclude(dt => dt.Tag);
+        }
     }
 }
