@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Azure.Core;
 
 namespace Application.Services {
 
@@ -73,6 +74,11 @@ namespace Application.Services {
 
         public async Task<SimpleDocumentResponese> GetByIdAsync(string docId) {
             var doc = await _repository.GetByIdAsync(_2Guid.ToGuid(docId));
+
+            var request = _httpContextAccessor.HttpContext?.Request;
+            var baseUrl = request != null ? $"{request.Scheme}://{request.Host}" : "";
+            var thumbPath = $"/storage/documents/{doc.Id}/{doc.Id}.jpg";
+
             return new SimpleDocumentResponese {
                 Id = doc.Id,
                 Title = doc.Title,
@@ -80,6 +86,7 @@ namespace Application.Services {
                 Field = doc.Field,
                 Sumary = doc.Sumary,
                 PageCount = doc.PageCount,
+                ThumbnailUrl = baseUrl + thumbPath,
                 Tags = doc.Tags?
                     .Select(dt => new TagResponse {
                         Id = dt.Tag.Id,

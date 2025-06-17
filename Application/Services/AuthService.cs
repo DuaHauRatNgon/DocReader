@@ -143,7 +143,7 @@ namespace Application.Services {
             //Console.WriteLine(refreshToken.User);
 
             if (refreshToken == null || !refreshToken.IsActive)
-                throw new SecurityTokenException("Token không hợp lệ hoặc đã hết hạn.");
+                throw new SecurityTokenException("token invalid hoac da outdate roi !");
 
 
             refreshToken.Revoked = DateTime.UtcNow;             // 2 danh dau token cũ la revoked

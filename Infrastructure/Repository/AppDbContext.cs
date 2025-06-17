@@ -10,6 +10,8 @@ namespace Infrastructure.Repository {
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, string> {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+
+
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentPage> DocumentPages { get; set; }
         public DbSet<Tag> Tags { get; set; }
@@ -17,10 +19,12 @@ namespace Infrastructure.Repository {
 
 
 
-
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
+
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<CommentLike> CommentLikes { get; set; }
 
 
 
@@ -69,12 +73,6 @@ namespace Infrastructure.Repository {
                            .HasOne(t => t.User)
                            .WithMany()
                            .HasForeignKey(t => t.UserId);
-
-
-
-
-
-
 
 
         }

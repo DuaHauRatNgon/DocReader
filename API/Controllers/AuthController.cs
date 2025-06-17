@@ -111,6 +111,41 @@ namespace API.Controllers {
             return Ok(new { message = "Change password success" });
         }
 
+
+
+
+
+        [Authorize]
+        [HttpGet("me")]
+        // luồng xác thực từ JWT vào HttpContext.User
+        /*
+         Request từ client (có JWT Bearer Token)
+                 ↓
+        ASP.NET Core Middleware Pipeline
+                ↓
+        Authentication Middleware (JwtBearer)
+                ↓
+        Giải mã JWT → xác thực chữ ký số (Signature)
+                ↓
+        Nếu hợp lệ → sinh ra ClaimsPrincipal
+                ↓
+        Gán vào HttpContext.User
+                ↓
+        Tại Controller → dùng [Authorize], hoặc truy cập User (HttpContext.User)
+
+        */
+        public IActionResult GetProfile() {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            return Ok(new { userId, email, role });
+        }
+
+
+
+
+
+
     }
 
 }

@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Core.Models.Domain;
 
 namespace API {
     public class Program {
@@ -137,6 +138,8 @@ namespace API {
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddScoped<CommentRepository>();
+            builder.Services.AddScoped<CommentService>();
 
 
             var app = builder.Build();

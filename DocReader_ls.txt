@@ -1,0 +1,22 @@
+ ~/Documents/Learn CSharp/Other/DocReader 
+$ ls
+API/  Application/    Core/  DocReader.sln  Infrastructure/  
+
+$ ls Application/
+Application.csproj  DTOs/  Services/  bin/  obj/
+
+$ ls API/
+API.csproj  API.csproj.user  Controllers/  Program.cs  Properties/  appsettings.Development.json  appsettings.json  bin/  obj/  storage/
+
+$ ls Core/
+Core.csproj  Interfaces/  Models/  bin/  obj/
+
+$ ls Infrastructure/
+Email/  ExtractTextFromPdf/  FileStorage/  Identity/  Infrastructure.csproj  Migrations/  PdfProcessing/  Repository/  _2Guid.cs  bin/  obj/
+
+$ ls Application/Services/
+AuthService.cs          DocumentLoadingByBatchService.cs  DocumentRemoveService.cs  DocumentUploadService.cs
+DocumentLoadService.cs  DocumentModifyService.cs          DocumentSearchService.cs  TagService.cs
+
+$ ls API/Controllers/
+AuthController.cs  DocumentController.cs  TagController.cs
