@@ -18,5 +18,6 @@ namespace Core.Models.Domain {
 
         public ICollection<DocumentPage> Pages { get; set; }
         public ICollection<DocumentTag> Tags { get; set; } = new List<DocumentTag>();
+        public ICollection<DocumentVote> Votes { get; set; } = new List<DocumentVote>();
     }
 }

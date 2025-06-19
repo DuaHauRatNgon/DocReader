@@ -43,6 +43,7 @@ namespace API {
             builder.Services.AddScoped<DocumentSearchService>();
 
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 
             builder.Services.AddIdentity<AppUser, AppRole>(options => {
@@ -140,6 +141,11 @@ namespace API {
 
             builder.Services.AddScoped<CommentRepository>();
             builder.Services.AddScoped<CommentService>();
+
+
+            builder.Services.AddScoped<DocumentVoteRepository>();
+            builder.Services.AddScoped<VoteService>();
+            builder.Services.AddScoped<DocumentRepository>();
 
 
             var app = builder.Build();

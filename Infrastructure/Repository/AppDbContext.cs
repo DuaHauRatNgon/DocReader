@@ -27,6 +27,11 @@ namespace Infrastructure.Repository {
         public DbSet<CommentLike> CommentLikes { get; set; }
 
 
+        public DbSet<DocumentVote> DocumentVotes { get; set; }
+
+
+        public DbSet<PageBookmark> PageBookmarks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
@@ -75,6 +80,21 @@ namespace Infrastructure.Repository {
                            .HasForeignKey(t => t.UserId);
 
 
+
+            modelBuilder.Entity<DocumentVote>(entity => {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => new { e.UserId, e.DocumentId }).IsUnique();
+                entity.HasOne(e => e.Document)
+                      .WithMany(d => d.Votes)
+                      .HasForeignKey(e => e.DocumentId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+            /// user chi duoc bookmark 1 page 1 lan --- unique
+            modelBuilder.Entity<PageBookmark>()
+                .HasIndex(b => new { b.UserId, b.DocumentId, b.PageNumber })
+                .IsUnique();
         }
     }
 
