@@ -10,7 +10,7 @@ using Core.Interfaces;
 using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
-using Core.Models.Domain.Core.Models.Domain;
+using Core.Models.Domain;
 using System.Drawing.Imaging;
 using UglyToad.PdfPig.Graphics;
 using Infrastructure.PdfProcessing;

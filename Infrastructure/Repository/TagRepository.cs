@@ -1,4 +1,4 @@
-﻿using Core.Models.Domain.Core.Models.Domain;
+﻿using Core.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

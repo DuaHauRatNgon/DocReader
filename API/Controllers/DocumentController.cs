@@ -138,5 +138,27 @@ namespace DocReader.Controllers {
             return Ok(result);
         }
 
+
+
+
+
+
+
+        [HttpGet("tag/{tagId}")]
+        public async Task<IActionResult> GetDocumentsByTag(Guid tagId) {
+            var docs = await _loadService.GetByTagIdAsync(tagId);
+            return Ok(docs);
+        }
+
+
+
+
+        [HttpGet]
+        [Route("top-voted-docs")]
+        public async Task<IActionResult> GetTopVotedDocuments()
+        {
+            var res = await _loadService.GetTopDocumentUpvote();
+            return Ok(res);     
+        }
     }
 }

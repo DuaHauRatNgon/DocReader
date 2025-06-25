@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure;
 using Infrastructure.Repository;
-using Core.Models.Domain.Core.Models.Domain;
+using Core.Models.Domain;
 
 namespace Application.Services {
     public class TagService {

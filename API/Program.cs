@@ -1,22 +1,27 @@
-﻿using Application.Services;
+﻿using Infrastructure.Hubs;
+using Application.Services;
+using Core.Interfaces;
+using Core.Models.Domain;
+using Core.Models.Identity;
 using DocReader.Service.DocumentProcessor;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using HotChocolate.Data;
+using Infrastructure.Email;
 using Infrastructure.FileStorage;
+using Infrastructure.Hubs;
+using Infrastructure.Identity;
 using Infrastructure.PdfProcessing;
 using Infrastructure.Repository;
-using Core.Interfaces;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Core.Models.Identity;
-using Microsoft.AspNetCore.Identity;
-
-using Infrastructure.Identity;
-using Infrastructure.Email;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.IO;
 using System.Text;
-using Core.Models.Domain;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace API {
     public class Program {
@@ -41,6 +46,8 @@ namespace API {
             builder.Services.AddScoped<TagService>();
             builder.Services.AddScoped<TagRepository>();
             builder.Services.AddScoped<DocumentSearchService>();
+            builder.Services.AddScoped<PageBookmarkService>();
+            builder.Services.AddScoped<PageBookmarkRepository>();    
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserContextService, UserContextService>();
@@ -64,12 +71,13 @@ namespace API {
 
 
             builder.Services.AddCors(options => {
-                options.AddDefaultPolicy(policy => {
+                options.AddPolicy("AllowFrontend", policy => {
                     policy.WithOrigins("http://localhost:3000")
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                 });
-            });
+            }); ;
 
 
             builder.Services.AddScoped<EmailSender>();
@@ -148,6 +156,22 @@ namespace API {
             builder.Services.AddScoped<DocumentRepository>();
 
 
+
+            builder.Services
+                .AddGraphQLServer()
+                // root query
+                .AddQueryType<Query>()
+                .AddFiltering()
+                .AddSorting()
+                // add projection vi minh select vào dto
+                .AddProjections();
+
+
+            builder.Services.AddSignalR();
+            builder.Services.AddScoped<SendNotificationAllUserService>();
+            builder.Services.AddScoped<NotificationRepository>();
+
+
             var app = builder.Build();
 
 
@@ -171,12 +195,13 @@ namespace API {
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions {
                 FileProvider = new PhysicalFileProvider(
-                     Path.Combine(Directory.GetCurrentDirectory(), "storage", "documents")),
-                RequestPath = "/storage/documents"
+                                          System.IO.Path.Combine(Directory.GetCurrentDirectory(),
+                                                                            "storage", "documents")),
+                                                                              RequestPath = "/storage/documents"              
             });
 
 
-
+            app.UseRouting();
 
             app.UseHttpsRedirection();
 
@@ -186,6 +211,10 @@ namespace API {
             app.UseCors();
 
             app.MapControllers();
+
+            app.UseCors("AllowFrontend");
+            //app.MapHub<NotificationHub>("/hubs/notification");
+            app.MapHub<NotificationHub>("/hubs/notification").RequireCors("AllowFrontend");
 
             app.Run();
         }

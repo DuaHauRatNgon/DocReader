@@ -1,5 +1,4 @@
-﻿using Core.Models.Domain.Core.Models.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,4 @@ namespace Core.Models.Domain {
         public Guid TagId { get; set; }
         public Tag Tag { get; set; }
     }
-
-
 }

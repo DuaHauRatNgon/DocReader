@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Core.Models.Domain;
 
+
 namespace Core.Interfaces {
     public interface IDocumentRepository {
         Task<IEnumerable<Document>> GetAllAsync();
@@ -16,6 +17,9 @@ namespace Core.Interfaces {
 
 
         IQueryable<Document> GetQueryable();
+
+        Task<List<Document>> GetDocumentsByTagIdAsync(Guid tagId);
+
     }
 
 }

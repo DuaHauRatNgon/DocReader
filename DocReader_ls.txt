@@ -1,22 +1,36 @@
- ~/Documents/Learn CSharp/Other/DocReader 
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls
-API/  Application/    Core/  DocReader.sln  Infrastructure/  
+API/  Application/  Core/  DocReader.sln  DocReader_Note.txt  DocReader_ls.txt  Infrastructure/  Scripts/
 
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls API/
+API.csproj  API.csproj.user  Controllers/  GraphQL/  Program.cs  Properties/  appsettings.json  bin/  obj/  storage/
+
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls API/Controllers/
+AuthController.cs  CommentController.cs  DocumentController.cs  PageBookmarkController.cs  TagController.cs  VoteController.cs
+
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Application/
 Application.csproj  DTOs/  Services/  bin/  obj/
 
-$ ls API/
-API.csproj  API.csproj.user  Controllers/  Program.cs  Properties/  appsettings.Development.json  appsettings.json  bin/  obj/  storage/
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls Application/Services/
+AuthService.cs     DocumentLoadService.cs            DocumentModifyService.cs  DocumentSearchService.cs  PageBookMarkService.cs  VoteService.cs
+CommentService.cs  DocumentLoadingByBatchService.cs  DocumentRemoveService.cs  DocumentUploadService.cs  TagService.cs
 
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Core/
 Core.csproj  Interfaces/  Models/  bin/  obj/
 
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls Core/Interfaces/
+IAuthService.cs  ICommentRepository.cs  IDocumentRepository.cs  ITokenGenerator.cs  IUserContextService.cs
+
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Infrastructure/
 Email/  ExtractTextFromPdf/  FileStorage/  Identity/  Infrastructure.csproj  Migrations/  PdfProcessing/  Repository/  _2Guid.cs  bin/  obj/
 
-$ ls Application/Services/
-AuthService.cs          DocumentLoadingByBatchService.cs  DocumentRemoveService.cs  DocumentUploadService.cs
-DocumentLoadService.cs  DocumentModifyService.cs          DocumentSearchService.cs  TagService.cs
-
-$ ls API/Controllers/
-AuthController.cs  DocumentController.cs  TagController.cs
+hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls Infrastructure/Repository/
+AppDbContext.cs  CommentRepository.cs  DocumentPageRepository.cs  DocumentRepository.cs  DocumentVoteRepository.cs  PageBookmarkRepository.cs  TagRepository.cs

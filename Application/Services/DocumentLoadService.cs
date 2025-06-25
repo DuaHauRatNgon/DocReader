@@ -1,26 +1,26 @@
 ﻿using Application.DTOs;
-using Infrastructure;
+using Azure.Core;
 using Core.Interfaces;
-
+using Infrastructure;
+using Infrastructure.Repository;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Azure.Core;
 
 namespace Application.Services {
 
 
 
     public class DocumentLoadService {
-        private readonly IDocumentRepository _repository;
+        private readonly DocumentRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
 
-        public DocumentLoadService(IDocumentRepository repository,
+        public DocumentLoadService(DocumentRepository repository,
              IHttpContextAccessor httpContextAccessor) {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
@@ -65,6 +65,11 @@ namespace Application.Services {
                                  Tags = q.Tags?
                                             .Select(dt => new TagResponse { Id = dt.Tag.Id, Name = dt.Tag.Name })
                                             .ToList() ?? new List<TagResponse>()
+                                // or
+                                 //Tags = q.Tags != null
+                                 //                   ? q.Tags.Select(...).ToList()
+                                 //                   : new List<TagResponse>();
+
                              };
             return docResList;
         }
@@ -95,6 +100,44 @@ namespace Application.Services {
                      .ToList()
                      ?? new List<TagResponse>()
             };
+        }
+
+
+
+
+
+
+
+        public async Task<List<DocumentDTO>> GetByTagIdAsync(Guid tagId) {
+            var documents = await _repository.GetDocumentsByTagIdAsync(tagId);
+
+            var result = documents.Select(d => new DocumentDTO {
+                Id = d.Id,
+                Title = d.Title,
+                Field = d.Field,
+                Author = d.Author,
+                PageCount = d.PageCount,
+                Tags = d.Tags.Select(t => t.Tag.Name).ToList()
+            }).ToList();
+
+            return result;
+        }
+
+
+
+
+
+
+        public async Task<List<TopDocumentDTO>> GetTopDocumentUpvote()   {
+            var listInfraTopDdcoDtos = await _repository.TakeTopDocumentUpvote();
+            var r = listInfraTopDdcoDtos.Select(x => new TopDocumentDTO
+            {
+                Title = x.Title,
+                Author = x.Author,
+                Tags = x.Tags,
+                UpvoteCount = x.UpvoteCount
+            }).ToList();
+            return r;
         }
 
     }

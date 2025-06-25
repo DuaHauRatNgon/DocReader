@@ -1,5 +1,4 @@
 ﻿using Core.Models.Domain;
-using Core.Models.Domain.Core.Models.Domain;
 using Core.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -33,6 +32,9 @@ namespace Infrastructure.Repository {
         public DbSet<PageBookmark> PageBookmarks { get; set; }
 
 
+        public DbSet<Notification> Notifications { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
@@ -47,15 +49,18 @@ namespace Infrastructure.Repository {
             modelBuilder.Entity<DocumentTag>()
                 .HasOne(dt => dt.Document)
                 .WithMany(d => d.Tags)
-                .HasForeignKey(dt => dt.DocumentId);
+                .HasForeignKey(dt => dt.DocumentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DocumentTag>()
                 .HasOne(dt => dt.Tag)
                 .WithMany(t => t.DocumentTags)
-                .HasForeignKey(dt => dt.TagId);
+                .HasForeignKey(dt => dt.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-
-
+            // Ensure DocumentTag is properly configured as a join table
+            modelBuilder.Entity<DocumentTag>()
+                .ToTable("DocumentTags");
 
             modelBuilder.Entity<AppUser>(entity => {
                 entity.Property(e => e.FullName).HasMaxLength(100);
