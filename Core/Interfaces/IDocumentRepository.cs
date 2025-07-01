@@ -20,6 +20,8 @@ namespace Core.Interfaces {
 
         Task<List<Document>> GetDocumentsByTagIdAsync(Guid tagId);
 
+
+        Task<object> GetRelatedDocumentsByTagAsync(Guid documentId, int limit = 5);
     }
 
 }

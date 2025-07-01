@@ -93,7 +93,7 @@ namespace Application.Services {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password)) {
                 Console.WriteLine($"{user.EmailConfirmed}");
-                throw new UnauthorizedAccessException("Invalid credentials");
+                throw new UnauthorizedAccessException("invalid credential");
             }
 
             //var accessToken = await _tokenGenerator.GenerateAccessTokenAsync(user);

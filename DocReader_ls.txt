@@ -1,36 +1,44 @@
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+Meo@DESKTOP-I2BAK97 MINGW64 ~/Documents/Learn CSharp/Other/DocReader (main)
 $ ls
-API/  Application/  Core/  DocReader.sln  DocReader_Note.txt  DocReader_ls.txt  Infrastructure/  Scripts/
+API/       DocReader.sln     
+Application/  Core/      Infrastructure/ 
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls API/
-API.csproj  API.csproj.user  Controllers/  GraphQL/  Program.cs  Properties/  appsettings.json  bin/  obj/  storage/
+API.csproj       Controllers/  Program.cs   appsettings.Development.json  bin/  storage/
+API.csproj.user  GraphQL/      Properties/  appsettings.json              obj/
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls API/Controllers/
-AuthController.cs  CommentController.cs  DocumentController.cs  PageBookmarkController.cs  TagController.cs  VoteController.cs
+AuthController.cs     DocumentController.cs      PageBookmarkController.cs  VoteController.cs
+CommentController.cs  NotificationController.cs  TagController.cs
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Application/
 Application.csproj  DTOs/  Services/  bin/  obj/
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Application/Services/
-AuthService.cs     DocumentLoadService.cs            DocumentModifyService.cs  DocumentSearchService.cs  PageBookMarkService.cs  VoteService.cs
-CommentService.cs  DocumentLoadingByBatchService.cs  DocumentRemoveService.cs  DocumentUploadService.cs  TagService.cs
+AuthService.cs                    DocumentRelatedService.cs  SendNotificationAllUserService.cs
+CommentService.cs                 DocumentRemoveService.cs   TagService.cs
+DocumentLoadService.cs            DocumentSearchService.cs   VoteService.cs
+DocumentLoadingByBatchService.cs  DocumentUploadService.cs
+DocumentModifyService.cs          PageBookMarkService.cs
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Core/
 Core.csproj  Interfaces/  Models/  bin/  obj/
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
-$ ls Core/Interfaces/
-IAuthService.cs  ICommentRepository.cs  IDocumentRepository.cs  ITokenGenerator.cs  IUserContextService.cs
+$ ls Core/Models/
+Domain/  Identity/
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
+$ ls Core/Models/Domain/
+Comment.cs      Document.cs      DocumentTag.cs   Notification.cs  Tag.cs
+CommentLike.cs  DocumentPage.cs  DocumentVote.cs  PageBookmark.cs
+
+$ ls Core/Models/Identity/
+AppRole.cs  AppUser.cs  RefreshToken.cs
+
 $ ls Infrastructure/
-Email/  ExtractTextFromPdf/  FileStorage/  Identity/  Infrastructure.csproj  Migrations/  PdfProcessing/  Repository/  _2Guid.cs  bin/  obj/
+DTOs/   ExtractTextFromPdf/  Hubs/      Infrastructure.csproj  PdfProcessing/  _2Guid.cs  obj/
+Email/  FileStorage/         Identity/  Migrations/            Repository/     bin/
 
-hoang@DESKTOP-PKB4FQB MINGW64 /d/DocReader (main)
 $ ls Infrastructure/Repository/
-AppDbContext.cs  CommentRepository.cs  DocumentPageRepository.cs  DocumentRepository.cs  DocumentVoteRepository.cs  PageBookmarkRepository.cs  TagRepository.cs
+AppDbContext.cs            DocumentRepository.cs      PageBookmarkRepository.cs
+CommentRepository.cs       DocumentVoteRepository.cs  TagRepository.cs
+DocumentPageRepository.cs  NotificationRepository.cs

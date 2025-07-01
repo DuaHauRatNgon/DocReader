@@ -47,7 +47,7 @@ namespace API {
             builder.Services.AddScoped<TagRepository>();
             builder.Services.AddScoped<DocumentSearchService>();
             builder.Services.AddScoped<PageBookmarkService>();
-            builder.Services.AddScoped<PageBookmarkRepository>();    
+            builder.Services.AddScoped<PageBookmarkRepository>();
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserContextService, UserContextService>();
@@ -154,7 +154,7 @@ namespace API {
             builder.Services.AddScoped<DocumentVoteRepository>();
             builder.Services.AddScoped<VoteService>();
             builder.Services.AddScoped<DocumentRepository>();
-
+            builder.Services.AddScoped<DocumentRelatedService>();
 
 
             builder.Services
@@ -170,6 +170,12 @@ namespace API {
             builder.Services.AddSignalR();
             builder.Services.AddScoped<SendNotificationAllUserService>();
             builder.Services.AddScoped<NotificationRepository>();
+
+
+            builder.Services.AddScoped<ReportReasonOptionService>();
+            builder.Services.AddScoped<ReportService>();
+            builder.Services.AddScoped<ReportRepository>();
+            builder.Services.AddScoped<ReportReasonOptionRepository>();
 
 
             var app = builder.Build();
@@ -195,9 +201,10 @@ namespace API {
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions {
                 FileProvider = new PhysicalFileProvider(
-                                          System.IO.Path.Combine(Directory.GetCurrentDirectory(),
+                                          System.IO.Path
+                                          .Combine(Directory.GetCurrentDirectory(),
                                                                             "storage", "documents")),
-                                                                              RequestPath = "/storage/documents"              
+                RequestPath = "/storage/documents"
             });
 
 

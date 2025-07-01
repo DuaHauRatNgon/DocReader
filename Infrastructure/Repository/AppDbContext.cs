@@ -35,6 +35,14 @@ namespace Infrastructure.Repository {
         public DbSet<Notification> Notifications { get; set; }
 
 
+        public DbSet<Report> Reports { get; set; }
+
+
+        public DbSet<ReportReasonOption> ReportReasonOptions { get; set; }
+
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 

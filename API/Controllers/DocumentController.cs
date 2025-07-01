@@ -17,6 +17,7 @@ namespace DocReader.Controllers {
         private readonly DocumentRemoveService _removeService;
         private readonly DocumentLoadingByBatchService _loadPageService;
         private readonly DocumentSearchService _searchService;
+        private readonly DocumentRelatedService _relatedService;
 
 
         public DocumentController(DocumentUploadService uploadService,
@@ -24,13 +25,15 @@ namespace DocReader.Controllers {
                                     DocumentModifyService modifyService,
                                     DocumentRemoveService removeService,
                                     DocumentLoadingByBatchService loadPageService,
-                                    DocumentSearchService searchService) {
+                                    DocumentSearchService searchService,
+                                    DocumentRelatedService relatedService) {
             _uploadService = uploadService;
             _loadService = loadService;
             _modifyService = modifyService;
             _removeService = removeService;
             _loadPageService = loadPageService;
             _searchService = searchService;
+            _relatedService = relatedService;
         }
 
 
@@ -155,10 +158,20 @@ namespace DocReader.Controllers {
 
         [HttpGet]
         [Route("top-voted-docs")]
-        public async Task<IActionResult> GetTopVotedDocuments()
-        {
+        public async Task<IActionResult> GetTopVotedDocuments() {
             var res = await _loadService.GetTopDocumentUpvote();
-            return Ok(res);     
+            return Ok(res);
         }
+
+
+
+
+
+        [HttpGet("{id}/related")]
+        public async Task<IActionResult> GetRelatedDocuments(Guid id) {
+            var res = await _relatedService.AnhToai(id);
+            return Ok(res);
+        }
+
     }
 }
