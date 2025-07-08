@@ -43,8 +43,6 @@ namespace DocReader.Controllers {
         [Route("upload")]
         public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request) {
             var docId = await _uploadService.UploadAsync(request);
-            //return OkResult(docId);  
-            // ok vs okresult 
             return Ok(new { documentId = docId });
         }
 
@@ -100,6 +98,7 @@ namespace DocReader.Controllers {
 
             var base64Result = from p in pages
                                select new {
+                                   id = p.Id,
                                    pageNumber = p.PageNumber,
                                    pageContentBase64Encoded = p.ContentBase64Encoded
                                };
@@ -169,8 +168,18 @@ namespace DocReader.Controllers {
 
         [HttpGet("{id}/related")]
         public async Task<IActionResult> GetRelatedDocuments(Guid id) {
-            var res = await _relatedService.AnhToai(id);
+            var res = await _relatedService.GetRelatedDocAsync(id);
             return Ok(res);
+        }
+
+
+
+
+
+        [HttpGet("latest")]
+        public async Task<IActionResult> GetLatestDocuments([FromQuery] int count = 5) {
+            var docs = await _loadService.GetLatestDocumentsAsync(count);
+            return Ok(docs);
         }
 
     }

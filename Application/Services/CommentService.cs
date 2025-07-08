@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure;
 using Application.DTOs.Comment;
+using Infrastructure.DTOs;
 
 public class CommentService {
     private readonly CommentRepository _commentRepository;
@@ -155,4 +156,18 @@ public class CommentService {
             IsLiked = isLiked
         };
     }
+
+
+
+
+
+    public async Task<List<LatestCommentDto>> GetLatestCommentsAsync(int count) {
+        var comments = await _commentRepository.GetLatestRawCommentsAsync(count);
+        foreach (var c in comments) {
+            if (c.ContentPreview.Length > 50)
+                c.ContentPreview = c.ContentPreview.Substring(0, 50) + "...";
+        }
+        return comments;
+    }
+
 }

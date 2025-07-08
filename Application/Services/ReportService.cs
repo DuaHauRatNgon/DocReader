@@ -9,6 +9,7 @@ using Infrastructure.Repository;
 namespace Application.Services {
     public class ReportService {
         private readonly ReportRepository _repo;
+        private readonly NotificationRepository _notificationRepository;
 
         public ReportService(ReportRepository repo) {
             _repo = repo;
@@ -39,7 +40,10 @@ namespace Application.Services {
 
 
         public async Task HandleReportAsync(Guid reportId, string? note) {
+            var report = await _repo.GetReportByIdAsync(reportId);
             await _repo.HandleReportAsync(reportId, note);
+            var message = $"Báo cáo của bạn về {report.TargetType} đã được xử lý.";
+            await _notificationRepository.SendNotificationToUserAsync(report.ReporterId, message);
         }
 
 

@@ -119,4 +119,13 @@ public class CommentController : ControllerBase {
     }
 
 
+
+
+
+    [HttpGet("latest")]
+    public async Task<IActionResult> GetLatestComments([FromQuery] int count = 6) {
+        var comments = await _commentService.GetLatestCommentsAsync(count);
+        return Ok(comments);
+    }
+
 }

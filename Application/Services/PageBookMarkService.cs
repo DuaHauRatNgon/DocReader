@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -110,6 +111,22 @@ namespace Application.Services {
 
 
 
+
+        public async Task<IEnumerable<PageBookmarkResponeDto>> GetAllAsyncService() {
+            var userId = _user.UserId;
+            var tmp = await _repo.GetAllAsyncRepo(userId);
+            var r = new List<PageBookmarkResponeDto>();
+            foreach (var i in tmp) {
+                var j = new PageBookmarkResponeDto() {
+                    DocumentId = i.DocumentId,
+                    Title = i.Title,
+                    Author = i.Author,
+                    PageNumber = i.PageNumber
+                };
+                r.Add(j);
+            }
+            return r;
+        }
     }
 
 

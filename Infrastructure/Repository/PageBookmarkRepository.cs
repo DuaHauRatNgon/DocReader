@@ -1,4 +1,5 @@
 ﻿using Core.Models.Domain;
+using Infrastructure.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -91,5 +92,24 @@ namespace Infrastructure.Repository {
             return pages;
         }
 
+
+
+
+
+
+
+
+        public async Task<IEnumerable<PageBookmarkResponeDto>> GetAllAsyncRepo(string userId) {
+            var q = await (from p in _context.PageBookmarks
+                           where p.UserId == userId
+                           join d in _context.Documents on p.DocumentId equals d.Id
+                           select new PageBookmarkResponeDto {
+                               DocumentId = p.DocumentId,
+                               Title = d.Title,
+                               Author = d.Author,
+                               PageNumber = p.PageNumber,
+                           }).ToListAsync();
+            return q;
+        }
     }
 }

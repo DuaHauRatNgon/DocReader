@@ -22,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using API.GraphQL;
 
 namespace API {
     public class Program {
@@ -77,7 +78,7 @@ namespace API {
                           .AllowAnyMethod()
                           .AllowCredentials();
                 });
-            }); ;
+            });
 
 
             builder.Services.AddScoped<EmailSender>();
@@ -164,7 +165,9 @@ namespace API {
                 .AddFiltering()
                 .AddSorting()
                 // add projection vi minh select vào dto
-                .AddProjections();
+                .AddProjections()
+            //.AddMutationType<Mutation>();
+            ;
 
 
             builder.Services.AddSignalR();
@@ -178,7 +181,22 @@ namespace API {
             builder.Services.AddScoped<ReportReasonOptionRepository>();
 
 
+            //builder.Services.AddCors(options => {
+            //    options.AddPolicy("AllowNgrok", policy => {
+            //        policy.WithOrigins(" https://db81-222-252-26-209.ngrok-free.app")
+            //              .AllowAnyHeader()
+            //              .AllowAnyMethod()
+            //              .AllowCredentials();
+            //    });
+            //});
+
+
+            builder.Services.AddScoped<IHighlightQuoteRepository, HighlightQuoteRepository>();
+            builder.Services.AddScoped<HighlightQuoteService>();
+
+
             var app = builder.Build();
+
 
 
 
@@ -212,14 +230,19 @@ namespace API {
 
             app.UseHttpsRedirection();
 
+            //app.UseCors("AllowNgrok");
+            //app.UseCors();
+            app.UseCors("AllowFrontend");
+
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors();
+
 
             app.MapControllers();
 
-            app.UseCors("AllowFrontend");
+            //app.UseCors("AllowFrontend");
             //app.MapHub<NotificationHub>("/hubs/notification");
             app.MapHub<NotificationHub>("/hubs/notification").RequireCors("AllowFrontend");
 

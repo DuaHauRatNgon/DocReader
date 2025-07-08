@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 
-namespace API.Controllers
-{
+namespace API.Controllers {
     [ApiController]
     [Route("api/[controller]")]
-    public class NotificationController : ControllerBase  {
+    public class NotificationController : ControllerBase {
         private readonly SendNotificationAllUserService _notificationService;
 
 
         public NotificationController(SendNotificationAllUserService service) {
-            _notificationService = service;     
+            _notificationService = service;
         }
 
 
@@ -33,8 +32,7 @@ namespace API.Controllers
 
 
         [HttpPost("broadcast")]
-        public async Task<IActionResult> Broadcast([FromBody] NotificationDto dto)
-        {
+        public async Task<IActionResult> Broadcast([FromBody] NotificationDto dto) {
             await _notificationService.SendNoti(dto.Title, dto.Content);
             return Ok();
         }
@@ -49,16 +47,16 @@ namespace API.Controllers
 /*
 
       ┌────────────┐             HTTP              ┌──────────────────────┐
-      │ Admin User │ ────────────────────────────▶ │ NotificationController│
+      │ Admin User │ ────────────────────────────▶ │NotificationController│
       └────────────┘     POST /api/notification    └─────────┬────────────┘
-                                                              │
-                                                              ▼
+                                                             │
+                                                             ▼
                                                     ┌────────────────────┐
                                                     │  NotificationHub   │◀────────┐
                                                     └─────────┬──────────┘         │
                                                               │                    │
                                               SignalR         │     Kết nối WebSocket/SSE/LongPolling
-                                              Broadcast        ▼                    ▼
+                                              Broadcast       ▼                    ▼
                                                      ┌─────────────────┐    ┌─────────────────┐
                                                      │  Client/User A  │    │  Client/User B  │
                                                      └─────────────────┘    └─────────────────┘

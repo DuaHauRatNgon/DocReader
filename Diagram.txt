@@ -1,0 +1,10 @@
+| Sơ đồ                                 | Mục đích                                                                                | có cần không?                                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Use Case Diagram**                  | Mô tả chức năng hệ thống qua các hành động của người dùng (user)                        | ✅ **CẦN**                                                          |
+| **Class Diagram**                     | Mô tả các class (thực thể, DTO, service...), thuộc tính, quan hệ trong OOP              | ✅ **CẦN**                                                          |
+| **Entity Relationship Diagram (ERD)** | Mô tả cấu trúc **database** (bảng, PK/FK, quan hệ)                                      | ✅ **CẦN**                                                          |
+| **Database Diagram (DB Diagram)**     | Giống ERD, nhưng thiên về **database physical model**, có tên bảng, kiểu dữ liệu cụ thể | ✅ **CẦN**                                                          |
+| **Sequence Diagram**                  | Mô tả **luồng tương tác thời gian** giữa các object (controller → service → db)         | ⚠️ Cần nếu có nhiều API/phân tích logic                            |
+| **Activity Diagram**                  | Diễn tả luồng công việc (workflow, logic nghiệp vụ, các bước xử lý)                     | ⚠️ Cần nếu nghiệp vụ phức tạp (ví dụ: thanh toán, báo cáo vi phạm) |
+| **Component Diagram**                 | Mô hình các module (API, DB, service, frontend) trong hệ thống                          | ⚠️ Có thể thêm nếu bạn muốn mô tả kiến trúc tổng thể               |
+| **Deployment Diagram**                | Mô tả cách triển khai (hosting, server, database, client)                               | ❌ Không bắt buộc với đồ án backend đơn giản                        |

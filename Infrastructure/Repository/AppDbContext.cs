@@ -41,6 +41,7 @@ namespace Infrastructure.Repository {
         public DbSet<ReportReasonOption> ReportReasonOptions { get; set; }
 
 
+        public DbSet<HighlightQuote> HighlightQuotes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Core.Models.Domain;
 
 
+
 namespace Core.Interfaces {
     public interface IDocumentRepository {
         Task<IEnumerable<Document>> GetAllAsync();
@@ -20,8 +21,8 @@ namespace Core.Interfaces {
 
         Task<List<Document>> GetDocumentsByTagIdAsync(Guid tagId);
 
-
         Task<object> GetRelatedDocumentsByTagAsync(Guid documentId, int limit = 5);
+
     }
 
 }

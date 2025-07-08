@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,13 +20,17 @@ namespace API.Controllers {
 
 
         [HttpPost("document")]
+        [Authorize]
         public async Task<IActionResult> VoteDocument([FromBody] VoteDocumentDto voteDto) {
             //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             //var userName = User.FindFirst(ClaimTypes.Name)?.Value ??
             //                   User.FindFirst("name")?.Value ??
             //                   User.FindFirst(ClaimTypes.Email)?.Value;
 
-            var userId = User.Identity.Name;
+            //var userId = User.Identity.Name;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Không xác định được userId" });
             var res = await _voteService.VoteDocumentAsync(userId, voteDto);
 
             if (res) return Ok(new { message = "Vote oke" });

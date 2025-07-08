@@ -156,7 +156,6 @@ namespace Infrastructure.Repository {
 
 
         public async Task<List<Document>> GetDocumentsByTagIdAsync(Guid tagId) {
-            // Use direct join approach similar to raw SQL
             var documents = await _context.Documents
                 .Join(_context.DocumentTags,
                       d => d.Id,
@@ -184,6 +183,7 @@ namespace Infrastructure.Repository {
             // c1   linq to entities            
             var topdocs1 = await _context.Documents
                     .Select(d => new TopDocumentDto {
+                        Id = d.Id,
                         Title = d.Title,
                         Author = d.Author,
                         Tags = d.Tags.Select(x => x.Tag.Name).ToList(),
@@ -231,11 +231,13 @@ namespace Infrastructure.Repository {
         }
 
 
-
+        public async Task<object> GetRelatedDocumentsByTagAsync(Guid documentId, int limit = 5) {
+            return new object { };
+        }
 
 
         //
-        public async Task<object> GetRelatedDocumentsByTagAsync(Guid documentId, int limit = 5) {
+        public async Task<IEnumerable<RelatedRepoDTOs2>> GetRelatedDocumentsByTagAsyncWtf(Guid documentId, int limit = 5) {
             var currentTagIds = await (from t in _context.DocumentTags
                                        where t.DocumentId == documentId
                                        select t.TagId).ToListAsync();
@@ -267,19 +269,19 @@ namespace Infrastructure.Repository {
                      join t in _context.Tags on dt.TagId equals t.Id
                      join d in _context.Documents on dt.DocumentId equals d.Id
                      where currentTagIds.Contains(dt.TagId)
-                     select new {
-                         DocumentId = dt.DocumentId,
-                         Tag = t,
-                         Doc = d
+                     select new RelatedRepoDTOs {
+                         documentId = dt.DocumentId,
+                         tag = t,
+                         doc = d
                      };
-            var q2 = await q1.GroupBy(x => x.DocumentId).OrderBy(x => x.Count()).Take(5).Select(x => new {
+            var q2 = await q1.GroupBy(x => x.documentId).OrderBy(x => x.Count()).Take(5).Select(x => new RelatedRepoDTOs2 {
                 documentId = x.Key,
-                doc = x.FirstOrDefault().Doc,
-                tag = x.Select(s => s.Tag),
+                doc = x.FirstOrDefault().doc,
+                tag = x.Select(s => s.tag),
 
             }).ToListAsync();
 
-            //return q2;
+            return q2;
 
 
 
@@ -290,27 +292,40 @@ namespace Infrastructure.Repository {
 
 
             // tach linq ra tung phan
-            var query = (from dt in _context.DocumentTags
-                         where currentTagIds.Contains(dt.TagId) && dt.DocumentId != documentId
-                         group dt by dt.DocumentId into grouped
-                         select new {
-                             DocumentId = grouped.Key,
-                             Score = grouped.Count()
-                         }
-                    );
+            //var query = (from dt in _context.DocumentTags
+            //             where currentTagIds.Contains(dt.TagId) && dt.DocumentId != documentId
+            //             group dt by dt.DocumentId into grouped
+            //             select new {
+            //                 DocumentId = grouped.Key,
+            //                 Score = grouped.Count()
+            //             }
+            //        );
 
-            var scoredDocs = query
-                .OrderByDescending(x => x.Score)
-                .Take(limit)
-                .ToList(); // load len ram =)))
+            //var scoredDocs = query
+            //    .OrderByDescending(x => x.Score)
+            //    .Take(limit)
+            //    .ToList(); // load len ram =)))
 
-            var res = (
-                from s in scoredDocs
-                join d in _context.Documents on s.DocumentId equals d.Id
-                select d
-            ).ToList();
+            //var res = (
+            //    from s in scoredDocs
+            //    join d in _context.Documents on s.DocumentId equals d.Id
+            //    select d
+            //).ToList();
 
-            return res;
+            //return res;
         }
+
+
+
+
+
+
+        public async Task<List<Document>> GetLatestDocumentsAsync(int count) {
+            return await _context.Documents
+                .OrderByDescending(d => d.CreatedAt)
+                .Take(count)
+                .ToListAsync();
+        }
+
     }
 }

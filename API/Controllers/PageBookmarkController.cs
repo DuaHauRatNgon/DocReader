@@ -1,4 +1,5 @@
-﻿using Application.Services;
+﻿using Application.DTOs;
+using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -18,11 +19,27 @@ namespace API.Controllers {
 
 
         // 
+        //[HttpPost]
+        //public async Task<IActionResult> Add([FromBody] Guid documentId, [FromQuery] int pageNumber) {
+        //    await _service.AddAsync(documentId, pageNumber);
+        //    return Ok();
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Guid documentId, [FromQuery] int pageNumber) {
-            await _service.AddAsync(documentId, pageNumber);
+        public async Task<IActionResult> Add([FromBody] BookmarkRequest request) {
+            await _service.AddAsync(request.DocumentId, request.PageNumber);
             return Ok();
         }
+
+
+
+
+
+
+
+
+
+
 
         [HttpDelete]
         public async Task<IActionResult> Remove([FromQuery] Guid documentId, [FromQuery] int pageNumber) {
@@ -36,11 +53,6 @@ namespace API.Controllers {
             return Ok(result);
         }
 
-        //[HttpGet("check")]
-        //public async Task<IActionResult> Check(Guid documentId, int pageNumber) {
-        //    var bookmarked = await _service.IsBookmarked(documentId, pageNumber);
-        //    return Ok(new { bookmarked });
-        //}
 
 
 
@@ -48,7 +60,6 @@ namespace API.Controllers {
 
 
 
-        //Khi mo document, call API GET /api/PageBookmark/{docId  }/latest, chuyển đến pageNumber tra ve
         [HttpGet("{documentId}/latest")]
         public async Task<IActionResult> GetLatest(Guid documentId) {
             var latestPage = await _service.GetLatestBookmarkedPageAsync(documentId);
@@ -63,16 +74,21 @@ namespace API.Controllers {
 
 
 
-        // Call GET /api/PageBookmark/{docId}/ list, highlight các page đã bookmark / hien thi ds lề  trai phai.
 
         [HttpGet("{documentId}/list")]
-        public async Task<IActionResult> GetAll(Guid documentId) {
+        public async Task<IActionResult> GetAllById(Guid documentId) {
             var pages = await _service.GetAllBookmarkedPagesAsync(documentId);
             return Ok(pages);
         }
 
 
 
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll() {
+            var bms = await _service.GetAllAsyncService();
+            return Ok(bms);
+        }
 
     }
 }

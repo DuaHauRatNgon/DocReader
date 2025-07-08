@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.DTOs;
 
 namespace Infrastructure.Repository {
     public class CommentRepository {
@@ -274,6 +275,30 @@ namespace Infrastructure.Repository {
             return await _context.CommentLikes.AnyAsync(cl => cl.CommentId == commentId
                                                                         && cl.UserId == userId);
         }
+
+
+
+
+
+
+
+
+        public async Task<List<LatestCommentDto>> GetLatestRawCommentsAsync(int count) {
+            return await _context.Comments
+                .OrderByDescending(c => c.CreatedAt)
+                .Take(count)
+                .Join(_context.Documents,
+                      comment => comment.DocId,
+                      doc => doc.Id,
+                      (comment, doc) => new LatestCommentDto {
+                          UserName = comment.UserName,
+                          ContentPreview = comment.Content,
+                          CreatedAt = comment.CreatedAt,
+                          DocumentTitle = doc.Title
+                      })
+                .ToListAsync();
+        }
+        ////
 
     }
 }
