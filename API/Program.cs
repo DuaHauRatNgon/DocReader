@@ -1,4 +1,5 @@
-﻿using Infrastructure.Hubs;
+﻿using API.GraphQL;
+using Application.Interfaces;
 using Application.Services;
 using Core.Interfaces;
 using Core.Models.Domain;
@@ -10,6 +11,7 @@ using HotChocolate.Data;
 using Infrastructure.Email;
 using Infrastructure.FileStorage;
 using Infrastructure.Hubs;
+using Infrastructure.Hubs;
 using Infrastructure.Identity;
 using Infrastructure.PdfProcessing;
 using Infrastructure.Repository;
@@ -20,9 +22,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IO;
+using System.Security.Claims;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using API.GraphQL;
 
 namespace API {
     public class Program {
@@ -68,7 +70,9 @@ namespace API {
 
 
 
-            builder.Services.AddScoped<RoleSeeder>();
+            //builder.Services.AddScoped<RoleSeeder>();
+            builder.Services.AddScoped<IdentityDataSeeder>();
+
 
 
             builder.Services.AddCors(options => {
@@ -140,13 +144,57 @@ namespace API {
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = builder.Configuration["Jwt:Issuer"],
                             ValidAudience = builder.Configuration["Jwt:Audience"],
+                            RoleClaimType = ClaimTypes.Role,
                             IssuerSigningKey = new SymmetricSecurityKey(key)
                         };
                     });
 
 
 
-            builder.Services.AddAuthorization();
+            //builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options => {
+                // role-based
+                options.AddPolicy("RequireAdmin", policy =>
+                    policy.RequireRole("Admin"));
+
+                options.AddPolicy("RequireMod", policy =>
+                    policy.RequireRole("Mod"));
+
+                // claim based
+                options.AddPolicy("CanApproveDocument", policy =>
+                    policy.RequireClaim("Permission", "CanApproveDocument"));
+
+                options.AddPolicy("CanDeleteViolationDoc", policy =>
+                    policy.RequireClaim("Permission", "CanDeleteViolationDoc"));
+
+                options.AddPolicy("CanManageTags", policy =>
+                    policy.RequireClaim("Permission", "CanManageTags"));
+
+                options.AddPolicy("CanBanUser", policy =>
+                    policy.RequireClaim("Permission", "CanBanUser"));
+
+                options.AddPolicy("CanDeleteComment", policy =>
+                    policy.RequireClaim("Permission", "CanDeleteComment"));
+
+                options.AddPolicy("CanViewAllUsers", policy =>
+                    policy.RequireClaim("Permission", "CanViewAllUsers"));
+
+                // vd role  + claim 
+                options.AddPolicy("ModCanManageTags", policy =>
+                    policy.RequireRole("Mod")
+                          .RequireClaim("Permission", "CanManageTags"));
+            });
+
+
+
+
+
+
+
+
+
+
+
 
             builder.Services.AddScoped<CommentRepository>();
             builder.Services.AddScoped<CommentService>();
@@ -195,16 +243,31 @@ namespace API {
             builder.Services.AddScoped<HighlightQuoteService>();
 
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+            builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+
             var app = builder.Build();
 
 
 
 
 
+            //using (var scope = app.Services.CreateScope()) {
+            //    var roleSeeder = scope.ServiceProvider.GetRequiredService<RoleSeeder>();
+            //    await roleSeeder.SeedRolesAsync();
+            //}
+
             using (var scope = app.Services.CreateScope()) {
-                var roleSeeder = scope.ServiceProvider.GetRequiredService<RoleSeeder>();
-                await roleSeeder.SeedRolesAsync();
+                var services = scope.ServiceProvider;
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                await IdentityDataSeeder.SeedAsync(roleManager, userManager);
             }
+
 
 
 

@@ -35,6 +35,8 @@ namespace Infrastructure.Identity {
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            authClaims.AddRange(userClaims);
 
             var tokenKey = _config["Jwt:Key"] ?? throw new Exception("JWT Key k tim thay");
             var tokenIssuer = _config["Jwt:Issuer"];
