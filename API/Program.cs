@@ -13,8 +13,10 @@ using Infrastructure.FileStorage;
 using Infrastructure.Hubs;
 using Infrastructure.Hubs;
 using Infrastructure.Identity;
+using Infrastructure.Interface;
 using Infrastructure.PdfProcessing;
 using Infrastructure.Repository;
+using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -248,6 +250,25 @@ namespace API {
 
 
             builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+
+            builder.Services.AddScoped<IPendingDocumentRepository, PendingDocumentRepository>();
+            builder.Services.AddScoped<IUploadService, UploadService>();
+            builder.Services.AddScoped<ApprovalService>();
+            builder.Services.AddScoped<PendingDocumentService>();
+
+
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IReadingHistoryRepository, ReadingHistoryRepository>();
+            builder.Services.AddScoped<IReadingHistoryService, ReadingHistoryService>();
+
+
+            builder.Services.AddScoped<IFileStorageService, PhysicalFileStorageService>();
+
+
+
+            builder.Services.AddScoped<NotificationApprovalSenderService>();
 
 
             var app = builder.Build();

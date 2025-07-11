@@ -2,16 +2,13 @@
 
 using Application.DTOs;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DocReader.Controllers {
 
     [ApiController]
     [Route("/api/documents")]
     public class DocumentController : ControllerBase {
-
-
-
-        private readonly DocumentUploadService _uploadService;
         private readonly DocumentLoadService _loadService;
         private readonly DocumentModifyService _modifyService;
         private readonly DocumentRemoveService _removeService;
@@ -20,14 +17,13 @@ namespace DocReader.Controllers {
         private readonly DocumentRelatedService _relatedService;
 
 
-        public DocumentController(DocumentUploadService uploadService,
+        public DocumentController(
                                     DocumentLoadService loadService,
                                     DocumentModifyService modifyService,
                                     DocumentRemoveService removeService,
                                     DocumentLoadingByBatchService loadPageService,
                                     DocumentSearchService searchService,
                                     DocumentRelatedService relatedService) {
-            _uploadService = uploadService;
             _loadService = loadService;
             _modifyService = modifyService;
             _removeService = removeService;
@@ -39,12 +35,21 @@ namespace DocReader.Controllers {
 
 
 
-        [HttpPost]
-        [Route("upload")]
-        public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request) {
-            var docId = await _uploadService.UploadAsync(request);
-            return Ok(new { documentId = docId });
-        }
+        //[HttpPost]
+        //[Route("upload")]
+        //public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request) {
+        //    var docId = await _uploadService.UploadAsync(request);
+        //    return Ok(new { documentId = docId });
+        //}
+
+        //[HttpPost("upload")]
+        //public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request) {
+        //    var pendingId = await _uploadService.UploadPendingAsync(request);
+        //    return Ok(new { pendingDocumentId = pendingId });
+        //}
+
+
+
 
 
 
@@ -55,6 +60,17 @@ namespace DocReader.Controllers {
             var res = await _loadService.GetAllAsync();
             return Ok(res);
         }
+
+
+
+
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPaged([FromQuery] PagedRequest request) {
+            var result = await _loadService.GetPagedAsync(request);
+            return Ok(result);
+        }
+
 
 
 
