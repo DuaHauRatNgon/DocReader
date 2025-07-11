@@ -38,7 +38,7 @@ namespace API {
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext")));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<DocumentUploadService>();
             builder.Services.AddScoped<IDocumentProcessor, PdfSharpDocumentProcessor>();
             builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
