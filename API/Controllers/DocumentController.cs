@@ -198,5 +198,17 @@ namespace DocReader.Controllers {
             return Ok(docs);
         }
 
+
+
+
+        //[Authorize]
+        //[HttpGet("{id}/download")]
+        //public async Task<IActionResult> Download(Guid id) {
+        //    var file = await _documentDonwloadService.GetFileForDownloadAsync(id, UserId);
+        //    if (file == null) return Forbid();
+
+        //    return File(file.Stream, "application/pdf", file.FileName);
+        //}
+
     }
 }
