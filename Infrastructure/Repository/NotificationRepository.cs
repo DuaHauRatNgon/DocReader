@@ -39,6 +39,11 @@ namespace Infrastructure.Repository {
 
 
 
+        //public async Task NotifyUserAsync(string userId, string message) {
+        //    // userId phải trùng với client-side connection UserIdentifier
+        //    await _hub.Clients.User(userId).SendAsync("ReceiveNotification", message);
+        //}
+
 
 
 

@@ -1,7 +1,9 @@
 ﻿using Application.DTOs;
+using Application.DTOs;
 using Azure.Core;
 using Core.Interfaces;
 using Infrastructure;
+using Infrastructure.DTOs;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -9,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.DTOs;
 
 
 namespace Application.Services {
@@ -31,22 +32,7 @@ namespace Application.Services {
 
 
 
-        //public async Task<IEnumerable<SimpleDocumentResponese>> GetAllAsync() {
-        //    var docs = await _repository.GetAllAsync();
-        //    var docResList = from q in docs
-        //                     select new SimpleDocumentResponese {
-        //                         Id = q.Id,
-        //                         Author = q.Author,
-        //                         Field = q.Field,
-        //                         Title = q.Title,
-        //                         Sumary = q.Sumary,
-        //                         PageCount = q.PageCount,
-        //                         Tags = q.Tags?
-        //                                    .Select(dt => new TagResponse { Id = dt.Tag.Id, Name = dt.Tag.Name })
-        //                                      .ToList() ?? new List<TagResponse>()
-        //                     };
-        //    return docResList;
-        //}
+
 
         public async Task<IEnumerable<SimpleDocumentResponese>> GetAllAsync() {
             var docs = await _repository.GetAllAsync();
@@ -75,6 +61,44 @@ namespace Application.Services {
                              };
             return docResList;
         }
+
+
+
+
+
+
+        public async Task<PagedResult<SimpleDocumentResponese>> GetPagedAsync(PagedRequest request) {
+            var pagedDocs = await _repository.GetPagedAsync(request.Page, request.PageSize);
+
+            var httpRequest = _httpContextAccessor.HttpContext?.Request;
+            var baseUrl = httpRequest != null ? $"{httpRequest.Scheme}://{httpRequest.Host}" : "";
+
+            var docResList = pagedDocs.Items.Select(
+                q => new SimpleDocumentResponese {
+                    Id = q.Id,
+                    Author = q.Author,
+                    Field = q.Field,
+                    Title = q.Title,
+                    Sumary = q.Sumary,
+                    PageCount = q.PageCount,
+                    ThumbnailUrl = baseUrl + $"/storage/documents/{q.Id}/{q.Id}.jpg",
+                    Tags = q.Tags?
+                          .Select(dt => new TagResponse { Id = dt.Tag.Id, Name = dt.Tag.Name })
+                          .ToList() ?? new List<TagResponse>()
+                }).ToList();
+
+            return new PagedResult<SimpleDocumentResponese> {
+                Items = docResList,
+                TotalItems = pagedDocs.TotalItems,
+                Page = pagedDocs.Page,
+                PageSize = pagedDocs.PageSize
+            };
+        }
+
+
+
+
+
 
 
 
@@ -111,18 +135,6 @@ namespace Application.Services {
 
 
         public async Task<IEnumerable<SimpleDocumentResponese>> GetByTagIdAsync(Guid tagId) {
-            //var documents = await _repository.GetDocumentsByTagIdAsync(tagId);
-
-            //var result = documents.Select(d => new DocumentDTO {
-            //    Id = d.Id,
-            //    Title = d.Title,
-            //    Field = d.Field,
-            //    Author = d.Author,
-            //    PageCount = d.PageCount,
-            //    Tags = d.Tags.Select(t => t.Tag.Name).ToList()
-            //}).ToList();
-
-
             var docs = await _repository.GetDocumentsByTagIdAsync(tagId);
 
             var request = _httpContextAccessor.HttpContext?.Request;
@@ -187,6 +199,13 @@ namespace Application.Services {
 
             return result;
         }
+
+
+
+
+
+
+
 
 
     }

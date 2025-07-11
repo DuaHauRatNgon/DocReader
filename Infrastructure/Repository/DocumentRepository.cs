@@ -327,5 +327,67 @@ namespace Infrastructure.Repository {
                 .ToListAsync();
         }
 
+
+
+
+
+
+        public async Task<PagedResult<Document>> GetPagedAsync(int page, int pageSize) {
+            var query = _context.Documents
+                .Include(d => d.Tags)
+                .ThenInclude(dt => dt.Tag)
+                .AsQueryable();
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Document> {
+                Items = items,
+                TotalItems = totalItems,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
+
+        // code lỗi , để lại cho nhớ 
+        public async Task<PagedResult<Document>> GetPagedAsyncParallelQuery(int page, int pageSize) {
+            var query = _context.Documents
+                .Include(d => d.Tags)
+                .ThenInclude(dt => dt.Tag)
+                .AsQueryable();
+
+            var totalItems = query.CountAsync();
+
+            var items = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            await Task.WhenAll(totalItems, items);
+
+            /* 
+            ê cái đoạn này lỗi rồi :)))
+            dbcontext k thread safe 
+            lìfe cycle là scoped 
+            1 request 1 instance 
+            -> 2 truy vấn song song trên 1 context -> lỗi  
+            */
+
+            return new PagedResult<Document> {
+                Items = items.Result,
+                TotalItems = totalItems.Result,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
+
+
+
     }
 }

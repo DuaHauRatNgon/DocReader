@@ -4,6 +4,7 @@ using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250709114133_UploadApprroval")]
+    partial class UploadApprroval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,39 +334,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("PendingDocumentTags");
-                });
-
-            modelBuilder.Entity("Core.Models.Domain.ReadingHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DocumentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("LastReadPage")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastReadTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TotalReads")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("ReadingHistory");
                 });
 
             modelBuilder.Entity("Core.Models.Domain.Report", b =>
@@ -802,23 +772,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("PendingDocument");
 
                     b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("Core.Models.Domain.ReadingHistory", b =>
-                {
-                    b.HasOne("Core.Models.Domain.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Models.Identity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Document");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Models.Domain.Report", b =>

@@ -44,6 +44,15 @@ namespace Infrastructure.Repository {
         public DbSet<HighlightQuote> HighlightQuotes { get; set; }
 
 
+
+        public DbSet<PendingDocument> PendingDocuments { get; set; }
+        public DbSet<PendingDocumentTag> PendingDocumentTags { get; set; }
+
+
+
+        public DbSet<ReadingHistory> ReadingHistory { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
@@ -109,6 +118,24 @@ namespace Infrastructure.Repository {
             modelBuilder.Entity<PageBookmark>()
                 .HasIndex(b => new { b.UserId, b.DocumentId, b.PageNumber })
                 .IsUnique();
+
+
+
+
+
+
+            modelBuilder.Entity<PendingDocumentTag>()
+                .HasKey(pt => new { pt.PendingDocumentId, pt.TagId });
+
+            modelBuilder.Entity<PendingDocumentTag>()
+                .HasOne(pt => pt.PendingDocument)
+                .WithMany(p => p.Tags)
+                .HasForeignKey(pt => pt.PendingDocumentId);
+
+            modelBuilder.Entity<PendingDocumentTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany()
+                .HasForeignKey(pt => pt.TagId);
         }
     }
 

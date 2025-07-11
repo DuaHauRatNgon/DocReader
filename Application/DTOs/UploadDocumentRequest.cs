@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace Application.DTOs {
     public class UploadDocumentRequest {
-        public string Title { get; set; } = string.Empty;
-        public string Field { get; set; } = string.Empty;
-        public string Author { get; set; } = string.Empty;
+        [Required]
         public IFormFile File { get; set; } = null!;
-        public List<Guid> TagIds { get; set; }
+        public string Title { get; set; }
+        public string Field { get; set; }
+        public string Author { get; set; }
+        public List<Guid> TagIds { get; set; } = new();
     }
 
 }

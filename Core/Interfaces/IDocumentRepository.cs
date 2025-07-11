@@ -24,5 +24,4 @@ namespace Core.Interfaces {
         Task<object> GetRelatedDocumentsByTagAsync(Guid documentId, int limit = 5);
 
     }
-
 }
